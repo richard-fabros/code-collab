@@ -1,0 +1,33 @@
+<html>
+<title>Code Edit</title>
+
+<body>
+    <h3>Code Edit</h3>
+    <div>
+        <textarea rows="30" cols="50" id="editor" style="background-color:dimgrey;color:white"
+            placeholder="Type Your Text..."></textarea>
+    </div>
+</body>
+<script src="/socket.io/socket.io.js"></script>
+<script>
+    // client.js
+    var socket = io('http://localhost:3000');
+    const l = console.log
+    function getEl(id) {
+        return document.getElementById(id)
+    }
+    const editor = getEl("editor")
+
+    editor.addEventListener("keyup", (evt) => {
+        const text = editor.value
+        socket.emit('message', text, (response) => {
+            console.log(response.status); // ok
+        })
+    })
+
+    socket.on('message', (data) => {
+        editor.value = data
+    })
+</script>
+
+</html>
