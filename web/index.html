@@ -7,6 +7,15 @@
         <textarea rows="30" cols="50" id="editor" style="background-color:dimgrey;color:white"
             placeholder="Type Your Text..."></textarea>
     </div>
+    <div>
+        <button id="run">Run</button>
+    </div>
+
+    <h3>Console:</h3>
+    <div>
+        <textarea rows="30" cols="50" id="consoleEditor" style="background-color:dimgrey;color:white"
+            placeholder="Type Your Text..."></textarea>
+    </div>
 </body>
 <script src="/socket.io/socket.io.js"></script>
 <script>
@@ -25,9 +34,24 @@
         })
     })
 
+    const runBtn = getEl("run")
+
+    runBtn.addEventListener("click", (evt) => {
+        const text = editor.value
+        socket.emit('run', text, (response) => {
+            console.log(response.status); // ok
+        })
+    })
+
+    socket.on('consoleMessage', (data) => {
+        consoleEditor.value = data
+        console.log(data);
+    })
+
     socket.on('message', (data) => {
         editor.value = data
     })
+
 </script>
 
 </html>
